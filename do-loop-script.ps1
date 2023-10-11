@@ -10,6 +10,22 @@ $headers = @{
     "X-Egnyte-Action-Sources" = "EGD"
 }
 
+function parseDict($dict)
+{
+    $output = ""
+    foreach ($key in $dict.Keys)
+    {
+      $output += "$key : $($dict[$key])"
+    }
+    return $output
+}
+
+
+
+
+
+New-Item -ItemType "file" -Path ".\output.txt" -Force | Out-Null
+
 $count = 0
 
 while ($true)
@@ -24,6 +40,11 @@ while ($true)
         Write-Host "---------------------------------------------------"
         Write-Host "Response Status Code " $response.StatusCode
         Write-Host "---------------------------------------------------`r`n"
+        Add-Content -Path ".\output.txt" -Value "-------------------Run $($count)--------------------------------"
+        Add-Content -Path ".\output.txt" -Value "Response Headers:   $(parseDict($response.headers))"
+        Add-Content -Path ".\output.txt" -Value "---------------------------------------------------"
+        Add-Content -Path ".\output.txt" -Value "Response Status Code  $($response.StatusCode)"
+        Add-Content -Path ".\output.txt" -Value "---------------------------------------------------`r`n"
         Start-Sleep -Seconds 2
     }
     catch
@@ -32,5 +53,4 @@ while ($true)
     }
     
 }
-
 
