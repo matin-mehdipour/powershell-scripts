@@ -15,13 +15,10 @@ function parseDict($dict)
     $output = ""
     foreach ($key in $dict.Keys)
     {
-      $output += "$key : $($dict[$key])"
+        $output += "$key : $($dict[$key])"
     }
     return $output
 }
-
-
-
 
 
 New-Item -ItemType "file" -Path ".\output.txt" -Force | Out-Null
