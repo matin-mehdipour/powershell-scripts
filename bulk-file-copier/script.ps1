@@ -24,7 +24,8 @@ function main()
 }
 function getFilesFromFolders($folder)
 {
-    
+    newPath = $rootDir + $folder
+    $
 }
 
 
