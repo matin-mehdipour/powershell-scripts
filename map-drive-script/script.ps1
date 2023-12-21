@@ -1,22 +1,37 @@
-# Specify the network path and credentials
-$networkPath = "\\server\share"
 
+$charArray = [System.Collections.ArrayList](65..90) | ForEach-Object {[char]$_}
 
+$drivePaths = {"\\raven\programs", "\\raven\movies"}
 
-# Get available drive letters
-$usedDriveLetters = Get-WmiObject Win32_LogicalDisk | Select-Object -ExpandProperty DeviceID
-$availableDriveLetters = [char]('C'..'Z' | Where-Object { $_ -notin $usedDriveLetters })
+$usedDriveLetters = Get-PSDrive -PSProvider FileSystem | Select-Object -ExpandProperty Name
 
-# Check if there are available drive letters
-if ($availableDriveLetters.Count -eq 0) {
-    Write-Host "No available drive letters."
-} else {
-    # Choose a random available drive letter
-    $driveLetter = $availableDriveLetters | Get-Random
+$mountedDrives = Get-SmbMapping | Select-Object -ExpandProperty LocalPath
 
-    # Map the network drive
-    New-PSDrive -Name $driveLetter -PSProvider FileSystem -Root $networkPath -Persist -Credential $credentials
-
-    # Optionally, display the mapped drive
-    Get-PSDrive -Name $driveLetter
+function GetRandomChar() 
+{
+    $random = Get-Random -Minimum 0 -Maximum ($charArray.Length - 1)
+    return $charArray[$random]
 }
+
+
+foreach ($drive in $mountedDrives) 
+{
+   Remove-SmbMapping -LocalPath $drive -Force
+}
+
+$pathCount = 0
+
+while($pathCount -Lt $drivePaths.Length)
+{
+    $charIndex = GetRandomChar
+    $char = $charArray[$charIndex]
+    if ($usedDriveLetters -NotContains $char)
+    {
+        $drivePath = $drivePaths[$pathCount]
+        New-SmbMapping -LocalPath $char -RemotePath $drivePath -Persistent $true
+        $charArray.Remove($char)
+        $pathCount++
+    }
+    
+}
+

@@ -1,9 +1,7 @@
 
+$charArray = (65..90) | ForEach-Object {[char]$_}
 
-$chars = (65..90) | Out-Null
-foreach ($char in $chars) 
-{ 
-    $char
-    $charTemp = [char]$char 
-    print($charTemp)
-}
+$usedDriveLetters = Get-PSDrive -PSProvider FileSystem | Select-Object -ExpandProperty Name
+
+$mountedDrives = Get-SmbDrive | Select-Object -ExpandProperty LocalPath
+
