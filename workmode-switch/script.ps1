@@ -1,8 +1,5 @@
 
-param(
-    [Parameter(Mandatory=$true)]
-    [string[]]$Arguments
-)
+
 
 # Create an ArrayList
 $appList = New-Object System.Collections.ArrayList
@@ -10,24 +7,21 @@ $appList = New-Object System.Collections.ArrayList
 $appList.Add("chrome")
 $appList.Add("slack")
 $appList.Add("8x8 Work")
+$appList.Add("zoom")
 
 $processIDs = New-Object System.Collections.ArrayList
 
 
-param(
-    [Parameter(Mandatory=$true)]
-    [string[]]$Arguments
-)
 
 # Access individual arguments
-$mode = $Arguments[0]
+$mode = $args[0]
 
 if ($mode -eq "wm") 
 {
     # Do something
 }
 
-elif ($mode -eq "nm")
+elseif ($mode -eq "nm")
 {
  
     foreach ($app in $appList)
@@ -37,6 +31,10 @@ elif ($mode -eq "nm")
         {
             $processIDs.Add($process.Id)
         }
+    }
+    foreach ($id in $processIDs)
+    {
+        Stop-Process -Id $id
     }
 
 
