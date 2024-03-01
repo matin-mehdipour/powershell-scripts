@@ -25,7 +25,7 @@ if ($mode -eq "wm")
 {
    foreach ($app in $appMap.Keys)
    {
-       Start-Process -FilePath $appMap[$app] 2>&1 | Out-Null
+       Start-Process -FilePath $appMap[$app] | Out-Null
    }
 }
 
