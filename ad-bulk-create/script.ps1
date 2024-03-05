@@ -1,16 +1,18 @@
+Import-Module ActiveDirectory
 
 $inputPath = ''
 
 
 function Main 
 {
-    $inputPath = $args[1]
+    $inputPath = "input.csv"
 
     if ($inputPath -eq '') 
     {
         Write-Host "Please provide a path to the file"
         return
     }
+    parseInput
 }
 function parseInput()
 {
@@ -18,23 +20,28 @@ function parseInput()
 
     foreach ($line in $inputLines)
     {
-       $name = $line.Split(',')
-       $username = $name[0].Substring(0,1) + $name[1]
+       $fullName = $line.Split(',')
+       addUser($fullName)
     }
 }
-function addUser($username, $name)
+function addUser($fullName)
 {
-    $username = $username.ToLower()
+    $userName = $fullName[0].Substring(0,1) + $fullName[1]
+     
+    $userName = $userName.ToLower()
+
+    Write-Host "Adding user $userName"
 
     $userParams = @{
-        SamAccountName  = $username
-        UserPrincipalName = $username + "@matinhome.app"
-        Name            = $name[0] + " " + $name[1]
-        GivenName       = $name[0]
-        Surname         = $name[1]
-        DisplayName     = $name[0] + " " + $name[1]
+        SamAccountName  = $userName
+        UserPrincipalName = $userName + "@matinhome.app"
+        Name            = $fullName[0] + " " + $fullName[1]
+        GivenName       = $fullName[0]
+        Surname         = $fullName[1]
+        DisplayName     = $fullName[0] + " " + $fullName[1]
         Enabled         = $true
         AccountPassword = (ConvertTo-SecureString -AsPlainText "Support123" -Force)
+        Path = "OU=TestUsers,DC=matinhome,DC=app"
     }
 
     New-ADUser @userParams
