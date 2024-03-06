@@ -17,7 +17,17 @@ function Main
         # For example, you can print the file path
         Write-Host "Processing file: $file"
 
-        & "C:\Program Files\WinRAR\WinRAR.exe" x "C:\Path\To\YourArchive.rar" "C:\Your\Destination\Path\"
+        $folderPath = Split-Path -Parent $file
+        $filename = Split-Path -Leaf $file
+
+        $filename = $filename -replace ".rar|.zip", ""
+
+        $destPath = $folderPath + "\" + $filename
+
+        $7zArgs = "x -o $destPath  $file"
+        
+        Start-Process -FilePath "C:\7z2401-extra\7za.exe" -ArgumentList $7zArgs -Wait
+
 
     }
 
