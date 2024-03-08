@@ -29,7 +29,8 @@ function Main($arg)
         Write-Host "Invalid Site"
     }
 
-    Start-Process -FilePath "C:\Users\mmehdipour\AppData\Local\Programs\Opera\opera.exe" -ArgumentList "--remote $destUrl", "--ran-launcher", "--new-window"
+    $result = Start-Process -FilePath "C:\Users\mmehdipour\AppData\Local\Programs\Opera\opera.exe" -passthru -ArgumentList "--remote $destUrl", "--ran-launcher", "--new-window"
+    Write-Host Wait-Process $result.Id
 }
 
 # Call the main function
