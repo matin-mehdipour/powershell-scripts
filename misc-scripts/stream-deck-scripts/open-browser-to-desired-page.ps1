@@ -1,21 +1,36 @@
 # Define the main function
 
-global $youTube
-global $netflix
-global $hulu
 
-function Main 
+
+function Main($arg)
 {
-    global $youTube
-    global $netflix
-    global $hulu
+
 
     $youTube = "https://www.youtube.com"
     $netflix = "https://www.netflix.com"
     $hulu = "https://www.hulu.com"
 
-    $site = $args[1]
+    $enteredSite = $arg[0]
+
+    if ($enteredSite -eq "youtube") 
+    {
+        $destUrl = $youTube
+    }
+    elseif ($enteredSite -eq "netflix") 
+    {
+        $destUrl = $netflix
+    }
+    elseif ($enteredSite -eq "hulu") 
+    {
+        $destUrl = $hulu
+    }
+    else 
+    {
+        Write-Host "Invalid Site"
+    }
+
+    Start-Process -FilePath "C:\Users\mmehdipour\AppData\Local\Programs\Opera\opera.exe" -ArgumentList "--remote $destUrl", "--ran-launcher", "--new-window"
 }
 
 # Call the main function
-Main
+Main($args)
