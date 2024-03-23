@@ -11,7 +11,7 @@ function Main
     }
     #Connect-AzAccount
 
-    $fileContent = Get-Content -Path "input.csv"
+    $fileContent = Get-Content -Path "C:\Users\mmehdipour\github-projects\powershell-scripts\azure-ad-add-user-script\input.csv"
     foreach ($line in $fileContent)
     {   
         Write-Host "Processing line: $line"
@@ -20,11 +20,12 @@ function Main
         $name = $lineArray[1]
 
         Write-Host "Email: $email"
-        Write-Host "Name: $name"
+        #Write-Host "Name: $name"
 
         $nameSplit = $name -split " "
 
-        
+        Write-Host "First Name: $($nameSplit[0]) Last Name: $($nameSplit[1])"
+
     }
 }
 
