@@ -5,20 +5,12 @@ function Main
     if (Get-AzContext -ErrorAction SilentlyContinue)
     {
         Write-Host "Connected to Azure"
-        exit
     }
     else
     {
         Write-Host "Not connected to Azure"
         Read-Host "Press Enter to connect to Azure"
-        if (Get-Process -Name Connect-AzAccount -ErrorAction SilentlyContinue)
-        {
-            # If it's still running, stop the process
-            Stop-Process -Name Connect-AzAccount -Force
-        }       
-        $result = Connect-AzAccount
-        Write-Host $result
-        exit
+        Connect-AzAccount
     }
     #Connect-AzAccount
 
@@ -30,18 +22,22 @@ function Main
         $email = $lineArray[0]
         $name = $lineArray[1]
 
+        $emailSplit = $email -split "@"
+
         Write-Host "Email: $email"
         #Write-Host "Name: $name"
         $name = $name.Trim()
-        $nameSplit = $name -split " "
 
-        $displayName = "John Doe"
-        $userPrincipalName = "johndoe@example.com"
-        $password = "YourStrongPasswordHere"
+        $displayName = $name
+        $userPrincipalName = $emailSplit[0].Trim() + "@egnyteinternal.com"
+        $password = ConvertTo-SecureString "Egnyte$Welcome1234!!!" -AsPlainText -Force 
         $accountEnabled = $true
 
         # Create the new user
-        New-AzureADUser -DisplayName $displayName -UserPrincipalName $userPrincipalName -AccountEnabled $accountEnabled -Password $password
+        Write-Host $emailSplit[0]
+        $result = New-AzADUser -DisplayName $displayName -UserPrincipalName $userPrincipalName -AccountEnabled $accountEnabled -Password $password -MailNickname $emailSplit[0].Trim()
+        Write-Host $result
+        Write-Host "----------------------------------------------------------------------------------"
     }
 }
 
