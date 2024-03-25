@@ -30,7 +30,7 @@ function Main
 
         $displayName = $name
         $userPrincipalName = $emailSplit[0].Trim() + "@egnyteinternal.com"
-        $password = ConvertTo-SecureString "Egnyte$Welcome1234!!!" -AsPlainText -Force 
+        $password = ConvertTo-SecureString "Egnyte@Welcome1234!!!" -AsPlainText -Force 
         $accountEnabled = $true
 
         # Create the new user
